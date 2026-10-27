@@ -41,7 +41,10 @@ final class DestroyAction
                 'canceled_at' => now(),
             ]);
 
+
             $this->termJudgement->recalculate($session->enrollment);
+
+            
 
             return $session->refresh();
         });

@@ -7,6 +7,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Enums\UserStatus;
 
 /**
  * 受講中(in_progress)以外のユーザーをプラン機能から弾く Middleware。
@@ -25,6 +26,11 @@ final class EnsureActiveLearning
             abort(403, 'プラン期間が満了しました。プラン機能はご利用いただけません。プロフィール / 修了証は引き続きアクセス可能です。');
         }
 
-        return $next($request);
+        if($user->status === UserStatus::InProgress){
+            return $next($request);
+        }
+
+        abort(403);
+
     }
 }

@@ -27,6 +27,8 @@ final class IndexAction
 
         $query->withTrashed();
 
+
+
         if ($keyword !== null && $keyword !== '') {
             $query->where(function ($q) use ($keyword) {
                 $q->where('name', 'LIKE', "%{$keyword}%")
@@ -40,6 +42,8 @@ final class IndexAction
 
         if ($status !== null) {
             $query->where('status', $status->value);
+        }else{
+            $query->whereIn('status',['in_progress','invited','graduated']);
         }
 
         $driver = $query->getConnection()->getDriverName();
@@ -48,7 +52,7 @@ final class IndexAction
             $query->orderByRaw("FIELD(status, 'in_progress', 'invited', 'graduated', 'withdrawn')");
         } else {
             $query->orderByRaw(
-                "CASE status WHEN 'in_progress' THEN 1 WHEN 'invited' THEN 2 WHEN 'graduated' THEN 3 WHEN 'withdrawn' THEN 4 ELSE 5 END"
+                "CASE status WHEN 'in_progress' THEN 1 WHEN 'invited' THEN 2 WHEN 'graduated' THEN 3 ELSE 4 END"
             );
         }
 

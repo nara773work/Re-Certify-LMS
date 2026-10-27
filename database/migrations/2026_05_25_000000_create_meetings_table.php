@@ -23,9 +23,9 @@ return new class extends Migration
         Schema::create('meetings', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignUlid('enrollment_id')->constrained('enrollments')->restrictOnDelete();
-            $table->foreignUlid('coach_id')->constrained('users')->restrictOnDelete();
+            $table->foreignUlid('coach_id')->constrained('users')->restrictOnDelete()->unique();
             $table->foreignUlid('student_id')->constrained('users')->restrictOnDelete();
-            $table->dateTime('scheduled_at');
+            $table->dateTime('scheduled_at')->unique();
             $table->string('status', 20);
             $table->text('topic');
             $table->foreignUlid('canceled_by_user_id')->nullable()->constrained('users')->nullOnDelete();

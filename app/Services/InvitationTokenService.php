@@ -43,6 +43,10 @@ final class InvitationTokenService
             return false;
         }
 
+        if($invitation->accepted_at !== null){
+            return false;
+        }
+
         $user = $invitation->user;
         if ($user === null || $user->status !== UserStatus::Invited) {
             return false;

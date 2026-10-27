@@ -25,6 +25,7 @@ use App\Http\Controllers\MockExamQuestionController;
 use App\Http\Controllers\MockExamSessionController;
 use App\Http\Controllers\MockExamSessionMonitorController;
 use App\Http\Controllers\PartController;
+use App\Http\Controllers\QaBoardController;
 use App\Http\Controllers\QuestionCategoryController;
 use App\Http\Controllers\QuizHistoryController;
 use App\Http\Controllers\QuizStatsController;
@@ -58,7 +59,7 @@ Route::get('/onboarding/{invitation}', [OnboardingController::class, 'show'])
 Route::post('/onboarding/{invitation}', [OnboardingController::class, 'store'])
     ->middleware('signed')
     ->name('onboarding.store');
-
+    
 // ============================================================
 // 認証後の全ロール共通ルート
 // ============================================================
@@ -474,3 +475,10 @@ if (app()->environment('local')) {
         return view('_dev.components');
     })->name('_dev.components');
 }
+
+// ============================================================
+// コーチ・受講生共通ルート: 質問掲示板　
+// ============================================================
+Route::middleware(['auth', 'role:student,coach', 'active-learning'])->name('qa-board.')->group(function () {
+    Route::get('/qa-board', [QaBoardController::class, 'index'])->name('index');
+});

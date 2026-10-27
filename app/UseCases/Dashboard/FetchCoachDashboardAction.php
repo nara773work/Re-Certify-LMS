@@ -44,6 +44,7 @@ final class FetchCoachDashboardAction
         $assignedEnrollments = Enrollment::query()
             ->whereIn('certification_id', $coachingCertificationIds)
             ->whereIn('status', [EnrollmentStatus::Learning, EnrollmentStatus::Passed])
+            
             ->get();
 
         foreach ($assignedEnrollments as $enrollment) {

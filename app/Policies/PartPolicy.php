@@ -23,7 +23,7 @@ class PartPolicy
     {
         return match ($auth->role) {
             UserRole::Admin => true,
-            UserRole::Coach => false,
+            UserRole::Coach => in_array($certification->id,$auth->coachingCertificationIds()),
             default => false,
         };
     }
@@ -32,7 +32,7 @@ class PartPolicy
     {
         return match ($auth->role) {
             UserRole::Admin => true,
-            UserRole::Coach => false,
+            UserRole::Coach => in_array($part->certification_id,$auth->coachingCertificationIds()),
             default => $part->status === ContentStatus::Published,
         };
     }
@@ -71,7 +71,7 @@ class PartPolicy
     {
         return match ($auth->role) {
             UserRole::Admin => true,
-            UserRole::Coach => false,
+            UserRole::Coach => in_array($certification->id,$auth->coachingCertificationIds()),
             default => false,
         };
     }

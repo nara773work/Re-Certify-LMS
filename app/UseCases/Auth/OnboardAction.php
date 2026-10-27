@@ -56,6 +56,7 @@ final class OnboardAction
                 throw new InvalidInvitationTokenException;
             }
 
+
             // 受講生は Plan 必須(招待時に紐付け済み)。コーチは Plan を持たない。
             if ($user->role === UserRole::Student && $user->plan === null) {
                 throw new InvalidInvitationTokenException;
@@ -69,6 +70,7 @@ final class OnboardAction
                 'password' => Hash::make($validated['password']),
                 'profile_setup_completed' => true,
                 'email_verified_at' => $now,
+                'status' => UserStatus::InProgress->value,
             ];
 
             // 受講生のみ Plan 期間を確定。コーチは受講期間という業務概念を持たない。
@@ -100,6 +102,12 @@ final class OnboardAction
                     reason: 'オンボーディング初期付与',
                 );
             }
+
+            $invitation->update([
+                'accepted_at' => now(),
+                'status' => InvitationStatus::Accepted
+                ]);
+
 
             return $user->refresh();
         });
